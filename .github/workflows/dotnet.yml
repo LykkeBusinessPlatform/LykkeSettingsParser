@@ -21,6 +21,8 @@ jobs:
           tag: ${{ github.ref }}
       - name: Set version for release
         uses: allenevans/set-env@v1.0.0
+        env: 
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
         with:
           VERSION: ${{ steps.version.outputs.non-prefixed }}
 
