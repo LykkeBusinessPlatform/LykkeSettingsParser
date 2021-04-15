@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>Lykke.SettingsReader</PackageId>
+    <PackageId>LykkeBiz.SettingsReader</PackageId>
     <Version>1.0.1</Version>
-    <Authors>Lykke</Authors>
-    <Company>Lykke</Company>
+    <Authors>Lykke Business</Authors>
+    <Company>Lykke Business</Company>
     <Description>The package deserialise json and trown an exception it any of field is not filled.</Description>
-    <Copyright>@2017 - Lykke</Copyright>
-    <PackageLicenseUrl>https://github.com/LykkeCity/LykkeSettingsParser</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/LykkeCity/LykkeSettingsParser</PackageProjectUrl>
+    <Copyright>@2021 - Lykke Business</Copyright>
+    <PackageLicenseUrl>https://github.com/LykkeBusinessPlatform/LykkeSettingsParser</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/LykkeBusinessPlatform/LykkeSettingsParser</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/14153330?v=3&amp;s=200</PackageIconUrl>
-    <RepositoryUrl>https://github.com/LykkeCity/LykkeSettingsParser.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/LykkeBusinessPlatform/LykkeSettingsParser.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -33,7 +33,7 @@
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.0" PrivateAssets="All" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.0.0" />
-    <PackageReference Include="Polly" Version="6.1.0" />
+    <PackageReference Include="Polly" Version="7.2.2" />
   </ItemGroup>
   <ItemGroup Label="dotnet pack instructions">
     <Content Include="$(OutputPath)$(AssemblyName).pdb">

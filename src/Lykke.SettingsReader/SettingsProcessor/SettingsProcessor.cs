@@ -26,7 +26,7 @@ namespace Lykke.SettingsReader
     {
         private static CloudQueue _queue;
         private static string _sender;
-        private static RetryPolicy<CheckFieldResult> _retry = Policy
+        private static AsyncRetryPolicy<CheckFieldResult> _retry = Policy
             .Handle<Exception>()
             .OrResult<CheckFieldResult>(r => !r.Result)
             .WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(100));
@@ -34,7 +34,7 @@ namespace Lykke.SettingsReader
         /// <summary>
         /// Gets or sets the retry policy used when validating settings
         /// </summary>
-        public static RetryPolicy<CheckFieldResult> RetryPolicy
+        public static AsyncRetryPolicy<CheckFieldResult> RetryPolicy
         {
             get => _retry;
             set => _retry = value ?? throw new ArgumentNullException(nameof(value));
