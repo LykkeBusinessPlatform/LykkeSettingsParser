@@ -86,8 +86,6 @@ namespace Lykke.SettingsReader
         /// <returns></returns>
         public static async Task<string> CheckDependenciesAsync<T>(T model, Action<SlackNotificationOptions<T>> slackNotificationOptions = null)
         {
-            Console.WriteLine("Start checking services...");
-            
             var slackInfo = new SlackNotificationOptions<T>(model);
 
             slackNotificationOptions?.Invoke(slackInfo);

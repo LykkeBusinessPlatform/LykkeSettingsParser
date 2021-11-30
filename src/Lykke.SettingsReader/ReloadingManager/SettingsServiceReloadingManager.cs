@@ -30,8 +30,6 @@ namespace Lykke.SettingsReader
 
         protected override async Task<TSettings> Load()
         {
-            Console.WriteLine($"{DateTime.UtcNow} Reading settings");
-
             var content = await HttpClientProvider.Client.GetStringAsync(_settingsUrl);
             var processingResult = await SettingsProcessor.ProcessForConfigurationAsync<TSettings>(content);
             var settings = processingResult.Item1;
