@@ -113,10 +113,9 @@ namespace Lykke.SettingsReader
             }
 
             var errorMessages = await ProcessChecksAsync(model);
-            Console.WriteLine(string.IsNullOrEmpty(errorMessages)
-                ? "Services checked. OK"
-                : $"Services checked:{Environment.NewLine}{errorMessages} ");
-            
+            if (!string.IsNullOrEmpty(errorMessages))
+                Console.WriteLine($"Services checked:{Environment.NewLine}{errorMessages}");
+
             return errorMessages;
         }
         
