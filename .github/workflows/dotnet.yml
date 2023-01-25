@@ -22,7 +22,7 @@ jobs:
 
     - name: Get version from tag or input
       id: get_version
-      run: echo ::set-output name=version::${{ (github.event_name == 'push' && (github.ref == 'refs/tags/*') || (github.event_name == 'release' && github.action == 'published'))?env.GITHUB_REF:inputs.version}}
+      run: echo ::set-output name=version::${{ (github.event_name == 'push' && (github.ref == 'refs/tags/*') || (github.event_name == 'release' && github.action == 'published')) ? env.GITHUB_REF:inputs.version}}
 
     - name: Get PackageId from csproj
       id: get_package_id
