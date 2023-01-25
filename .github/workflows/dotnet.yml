@@ -23,23 +23,26 @@ jobs:
       - name: Get version from tag
         id: get_version_from_tag
         if: github.event_name == 'push' && github.ref == 'refs/tags/*'
-        run: echo ::set-output name=version::$(echo ${GITHUB_REF#refs/tags/})
+        run: |
+          echo "package_version=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Get version from release event
         id: get_version_from_release
         if: github.event_name == 'release' && github.action == 'published'
-        run: echo ::set-output name=version::$GITHUB_REF
+        run: |
+          echo "package_version=${GITHUB_REF}" >> $GITHUB_ENV
 
       - name: Get version from input
         id: get_version_from_input
         if: false == (github.event_name == 'push' && github.ref == 'refs/tags/*') && false == (github.event_name == 'release' && github.action == 'published')
-        run: echo ::set-output name=version::${{ inputs.version }}
+        run: |
+          echo "package_version=${{ inputs.version }}" >> $GITHUB_ENV
 
       - name: Build and Test
         run: dotnet build --configuration Release
 
       - name: Create the package
-        run: dotnet pack --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj /p:Version=${{steps.get_version.outputs.version}}
+        run: dotnet pack --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj /p:Version=${{ env.package_version }}
 
       - name: Publish Nuget Package
         run: dotnet nuget push src/Lykke.SettingsReader/bin/Release/*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
