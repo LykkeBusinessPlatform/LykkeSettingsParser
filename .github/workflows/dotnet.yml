@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Enter version number, e.g. 1.2.3'
+        description: "Enter version number, e.g. 1.2.3"
         required: true
 
 jobs:
@@ -17,19 +17,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Get version from tag or input
-      id: get_version
-      run: echo ::set-output name=version::${{ (github.event_name == 'push' && github.ref == 'refs/tags/*') || (github.event_name == 'release' && github.action == 'published') ? env.GITHUB_REF : inputs.version}}
+      - name: Get PackageId from csproj
+        id: get_package_id
+        run: echo ::set-output name=package_id::$(grep -oP '(?<=<PackageId>)[^<]+' *.csproj)
 
-    - name: Get PackageId from csproj
-      id: get_package_id
-      run: echo ::set-output name=package_id::$(grep -oP '(?<=<PackageId>)[^<]+' *.csproj)
+      - name: Get version from tag
+        id: get_version_from_tag
+        if: github.event_name == 'push' && github.ref == 'refs/tags/*'
+        run: echo ::set-output name=version::$(echo ${GITHUB_REF#refs/tags/})
 
-    - name: Build and Test
-      run: dotnet build --configuration Release
+      - name: Get version from release event
+        id: get_version_from_release
+        if: github.event_name == 'release' && github.action == 'published'
+        run: echo ::set-output name=version::$GITHUB_REF
 
-    - name: Publish Nuget Package
-      run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json -n ${{steps.get_package_id.outputs.package_id}} -v ${{steps.get_version.outputs.version}}
+      - name: Get version from input
+        id: get_version_from_input
+        if: false == (github.event_name == 'push' && github.ref == 'refs/tags/*') && false == (github.event_name == 'release' && github.action == 'published')
+        run: echo ::set-output name=version::${{ inputs.version }}
+
+      - name: Build and Test
+        run: dotnet build --configuration Release
+
+      - name: Publish Nuget Package
+        run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json -n ${{steps.get_package_id.outputs.package_id}} -v ${{steps.get_version.outputs.version}}
