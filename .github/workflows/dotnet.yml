@@ -1,24 +1,33 @@
-name: Publish On NuGet
+name: Publish Nuget Package
 
 on:
   push:
-    branches:
-      - master
     tags:
-      - '*' # Push version tags matching to *, i.e. v1.0.0, 20.15.10 
+      - "*" # Push version tags matching to *, i.e. v1.0.0, 20.15.10
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Enter version number, e.g. 1.2.3'
+        required: true
 
 jobs:
-  publish:
-    name: List on NuGet
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
 
-      - name: Build
-        run: dotnet build --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj
-        
-      - name: Create the package
-        run: dotnet pack --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj /p:Version=${GITHUB_REF#refs/tags/}
-        
-      - name: Publish the package
-        run: dotnet nuget push src/Lykke.SettingsReader/bin/Release/*.nupkg -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_API_KEY }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get version from tag or input
+        id: get_version
+        run: echo ::set-output name=version::${{ (github.event_name == 'push' && (github.ref == 'refs/tags/*') ) ? env.GITHUB_REF : inputs.version}}
+
+      - name: Get PackageId from csproj
+        id: get_package_id
+        run: echo ::set-output name=package_id::$(grep -oP '(?<=<PackageId>)[^<]+' *.csproj)
+
+      - name: Build and Test
+        run: dotnet build --configuration Release
+
+      - name: Publish Nuget Package
+        run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json -n ${{steps.get_package_id.outputs.package_id}} -v ${{steps.set_version.outputs.version}}
