@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace Lykke.SettingsReader.Checkers
 {
+    // todo: the checker has to be moved to SQL package
     internal class SqlChecker : ISettingsFieldChecker
     {
         public CheckFieldResult CheckField(object model, string propertyName, string value)
