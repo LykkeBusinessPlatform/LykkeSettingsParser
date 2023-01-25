@@ -38,5 +38,8 @@ jobs:
       - name: Build and Test
         run: dotnet build --configuration Release
 
+      - name: Create the package
+        run: dotnet pack --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj /p:Version=${{steps.get_version.outputs.version}}
+
       - name: Publish Nuget Package
-        run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json -n LykkeBiz.SettingsReader -v ${{steps.get_version.outputs.version}}
+        run: dotnet nuget push src/Lykke.SettingsReader/bin/Release/*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
