@@ -2,6 +2,7 @@
 
 namespace Lykke.SettingsReader.Checkers
 {
+    // todo: the checker has to be removed
     internal class AzureQueueChecker : ISettingsFieldChecker
     {
         public CheckFieldResult CheckField(object model, string propertyName, string value)
