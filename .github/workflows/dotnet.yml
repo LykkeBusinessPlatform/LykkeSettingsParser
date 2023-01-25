@@ -13,24 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Get release version from tag
-        id: version
-        uses: LykkeBusiness/get-semver-from-tag-action@v1.0.2
-        with:
-          tag: ${{ github.ref }}
-      - name: Set version for release
-        uses: allenevans/set-env@v1.0.0
-        env: 
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-        with:
-          VERSION: ${{ steps.version.outputs.non-prefixed }}
 
       - name: Build
-        run: dotnet build --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj /p:Version=$VERSION
+        run: dotnet build --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj
         
       - name: Create the package
-        run: dotnet pack --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj /p:Version=$VERSION
+        run: dotnet pack --configuration Release src/Lykke.SettingsReader/Lykke.SettingsReader.csproj /p:Version=${GITHUB_REF#refs/tags/}
         
-      - name: Publish the package to GPR
+      - name: Publish the package
         run: dotnet nuget push src/Lykke.SettingsReader/bin/Release/*.nupkg -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_API_KEY }}
