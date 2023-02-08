@@ -5,7 +5,7 @@ using System.Reflection;
 
 using Lykke.SettingsReader.Attributes;
 using Lykke.SettingsReader.Exceptions;
-
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Lykke.SettingsReader
@@ -36,7 +36,7 @@ namespace Lykke.SettingsReader
             }
         }
 
-        private static object Convert_FromObjectToObject(JObject jsonObject, Type targetType, string path)
+        public static object Convert_FromObjectToObject(JObject jsonObject, Type targetType, string path)
         {
             var result = Activator.CreateInstance(targetType);
             foreach (var property in (from p in targetType.GetTypeInfo().GetProperties()
@@ -45,6 +45,17 @@ namespace Lykke.SettingsReader
             {
                 var propertyPath = ConcatPath(path, property.Name);
                 var jProp = jsonObject.Properties().FirstOrDefault(jp => jp.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (jProp == null)
+                {
+                    var jsonProperty = property.GetCustomAttributes(typeof(JsonPropertyAttribute), false);
+                    if (jsonProperty.Any())
+                    {
+                        var jsonPropertyName = ((JsonPropertyAttribute)jsonProperty.First()).PropertyName;
+                        jProp = jsonObject.Properties().FirstOrDefault(jp => jp.Name.Equals(jsonPropertyName, StringComparison.OrdinalIgnoreCase));
+                    }
+                }
+                
                 if (jProp == null)
                 {
                     if (property.GetCustomAttributes(typeof(OptionalAttribute), false).Any())
