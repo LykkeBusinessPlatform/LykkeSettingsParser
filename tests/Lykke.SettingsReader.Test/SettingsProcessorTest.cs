@@ -151,7 +151,7 @@ namespace Lykke.SettingsReader.Test
             Assert.Equal((decimal)-10.2, model.Decimal);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on external service")]
         public async Task HttpCheckAttribute_IsOk()
         {
             var settings = await SettingsProcessor.ProcessAsync<TestHttpCheckModel>(
@@ -162,7 +162,7 @@ namespace Lykke.SettingsReader.Test
             Assert.Null(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on external service")]
         public async Task HttpCheckAttribute_IsArrayOk()
         {
             var settings = await SettingsProcessor.ProcessAsync<TestHttpCheckArrayModel>(
@@ -175,7 +175,7 @@ namespace Lykke.SettingsReader.Test
             Assert.Null(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on external service")]
         public async Task HttpCheckAttribute_IsListOk()
         {
             var settings = await SettingsProcessor.ProcessAsync<TestHttpCheckListModel>(
