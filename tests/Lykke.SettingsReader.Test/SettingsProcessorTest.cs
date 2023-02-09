@@ -5,12 +5,26 @@ using System.Threading.Tasks;
 using Lykke.SettingsReader.Exceptions;
 using Lykke.SettingsReader.Test.Models;
 using Lykke.SettingsReader.Test.Models.CheckAttributes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Lykke.SettingsReader.Test
 {
     public class SettingsProcessorTest
     {
+        class DefaultTestStub
+        {
+            public string Property1 { get; set; }       
+        }
+        
+        class HyphenTestStub
+        {
+            [JsonProperty("property-1")]
+            public string Property1 { get; set; }       
+        }
+        
+        
         private readonly string _jsonTest = @"{""test1"":""testString"",""test2"":2,""test3"":""2017-05-01 22:13:45"", ""subObject"":{""test1"":""testString1"",""test2"":21,""test3"":""2017-05-02 22:13:45""},
 ""subArray"":[{""test1"":""testString2"",""test2"":22,""test3"":""2017-05-03 22:13:45""},
 {""test1"":""testString3"",""test2"":23,""test3"":""2017-05-04 22:13:45""},
@@ -151,7 +165,7 @@ namespace Lykke.SettingsReader.Test
             Assert.Equal((decimal)-10.2, model.Decimal);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on external service")]
         public async Task HttpCheckAttribute_IsOk()
         {
             var settings = await SettingsProcessor.ProcessAsync<TestHttpCheckModel>(
@@ -162,7 +176,7 @@ namespace Lykke.SettingsReader.Test
             Assert.Null(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on external service")]
         public async Task HttpCheckAttribute_IsArrayOk()
         {
             var settings = await SettingsProcessor.ProcessAsync<TestHttpCheckArrayModel>(
@@ -175,7 +189,7 @@ namespace Lykke.SettingsReader.Test
             Assert.Null(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Depends on external service")]
         public async Task HttpCheckAttribute_IsListOk()
         {
             var settings = await SettingsProcessor.ProcessAsync<TestHttpCheckListModel>(
@@ -424,6 +438,28 @@ namespace Lykke.SettingsReader.Test
             string message = await SettingsProcessor.CheckDependenciesAsync(settings);
             
             Assert.Contains("Failed", message);
+        }
+
+        [Fact]
+        public void Convert_FromObjectToObject_Defaults_To_PropertyName()
+        {
+            var jObject = JObject.Parse("{\"Property1\": \"Value1\"}");
+
+            var result = SettingsProcessor.Convert_FromObjectToObject(jObject, typeof(DefaultTestStub), "");
+
+            Assert.IsType<DefaultTestStub>(result);
+            Assert.Equal("Value1", ((DefaultTestStub)result).Property1);
+        }
+
+        [Fact]
+        public void Convert_FromObjectToObject_FallsBack_To_Hyphen_PropertyName()
+        {
+            var jObject = JObject.Parse("{\"Property-1\": \"Value1\"}");
+            
+            var result = SettingsProcessor.Convert_FromObjectToObject(jObject, typeof(HyphenTestStub), "");
+            
+            Assert.IsType<HyphenTestStub>(result);
+            Assert.Equal("Value1", ((HyphenTestStub)result).Property1);
         }
     }
 }
