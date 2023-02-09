@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout codeeee
+      - name: Checkout code
         uses: actions/checkout@v2
         
       - name: Print context info
