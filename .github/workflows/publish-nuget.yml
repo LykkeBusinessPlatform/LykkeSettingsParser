@@ -24,7 +24,7 @@ jobs:
         id: get_version
         uses: battila7/get-version-action@v2
         
-        run: |
+      - run: |
           echo "package_version=${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV
 
       - name: Build and Test
