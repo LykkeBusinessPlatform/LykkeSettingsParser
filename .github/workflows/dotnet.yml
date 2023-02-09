@@ -19,13 +19,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
-      - name: Print context info
-        run: |
-          echo github.event_name=${{ github.event_name }}
-          echo github.ref=${{ github.ref }}
-          echo github.action=${{ github.action }}
-          echo github.event.action=${{ github.event.action }}
 
       - name: Get version from tag
         id: get_version_from_tag
@@ -35,13 +28,13 @@ jobs:
 
       - name: Get version from release event
         id: get_version_from_release
-        if: github.event_name == 'release' && github.action == 'published'
+        if: github.event_name == 'release' && github.event.action == 'published'
         run: |
           echo "package_version=${GITHUB_REF}" >> $GITHUB_ENV
 
       - name: Get version from input
         id: get_version_from_input
-        if: false == (github.event_name == 'push' && github.ref == 'refs/tags/*') && false == (github.event_name == 'release' && github.action == 'published')
+        if: false == (github.event_name == 'push' && github.ref == 'refs/tags/*') && false == (github.event_name == 'release' && github.event.action == 'published')
         run: |
           echo "package_version=${{ inputs.version }}" >> $GITHUB_ENV
 
