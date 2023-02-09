@@ -4,6 +4,13 @@ on:
   push:
     tags:
       - "*"
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Enter version number, e.g. 1.2.3"
+        required: true
 
 jobs:
   build:
@@ -13,12 +20,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Get version from tag
-        id: get_version_from_tag
+      - name: Get version
+        id: get_version
+        uses: battila7/get-version-action@v2
         run: |
-          echo "package_version=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
-      - name: Try get version from release
+          echo "package_version=${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV
 
       - name: Build and Test
         run: dotnet build --configuration Release
