@@ -1,4 +1,4 @@
-name: Publish Nuget Package On Tag Push
+name: Publish Nuget Package
 
 on:
   push:
@@ -23,6 +23,7 @@ jobs:
       - name: Get version
         id: get_version
         uses: battila7/get-version-action@v2
+        
         run: |
           echo "package_version=${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV
 
