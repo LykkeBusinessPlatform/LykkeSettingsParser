@@ -11,10 +11,12 @@ namespace Lykke.SettingsReader
     {
         private readonly string _path;
         private readonly Action<SlackNotificationOptions<TSettings>> _slackNotificationOptions;
+        private readonly Action<TSettings> _configure;
         private readonly bool _throwExceptionOnCheckError;
 
         public LocalSettingsReloadingManager(string path, 
             Action<SlackNotificationOptions<TSettings>> slackNotificationOptions,
+            Action<TSettings> configure = null,
             bool throwExceptionOnCheckError = false)
         {
             if (string.IsNullOrEmpty(path))
@@ -22,6 +24,7 @@ namespace Lykke.SettingsReader
 
             _path = path;
             _slackNotificationOptions = slackNotificationOptions;
+            _configure = configure;
             _throwExceptionOnCheckError = throwExceptionOnCheckError;
         }
 
@@ -48,7 +51,7 @@ namespace Lykke.SettingsReader
                     }
                 }
                 
-                
+                _configure?.Invoke(processingResult.Item1);
                 return processingResult.Item1;
             }
         }

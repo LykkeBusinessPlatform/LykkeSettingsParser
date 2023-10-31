@@ -43,7 +43,7 @@ namespace Lykke.SettingsReader
                 return new SettingsServiceReloadingManager<TSettings>(settingsUrl, null, configure, throwExceptionOnCheckError);
             }
 
-            return new LocalSettingsReloadingManager<TSettings>(settingsUrl, null, throwExceptionOnCheckError);
+            return new LocalSettingsReloadingManager<TSettings>(settingsUrl, null, configure, throwExceptionOnCheckError);
         }
 
         /// <summary>
@@ -82,8 +82,7 @@ namespace Lykke.SettingsReader
                 return new SettingsServiceReloadingManager<TSettings>(settingsUrl, slackNotificationOptions, configure, throwExceptionOnCheckError);
             }
 
-            return new LocalSettingsReloadingManager<TSettings>(settingsUrl, slackNotificationOptions,
-                throwExceptionOnCheckError);
+            return new LocalSettingsReloadingManager<TSettings>(settingsUrl, slackNotificationOptions, configure, throwExceptionOnCheckError);
         }
     }
 }
