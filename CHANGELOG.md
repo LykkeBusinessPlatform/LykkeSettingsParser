@@ -1,4 +1,4 @@
-## [[tbd]] (2023-11-01)
+## 7.2.1 (2023-11-01)
 
 ### Added
 - Feature to apply modification to loaded configuration as it was working for remote json but was not available for local json configurations.
