@@ -10,6 +10,7 @@ using Lykke.SettingsReader.Exceptions;
 using Lykke.SettingsReader.ReloadingManager.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
+using MongoDB.Bson;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Polly;
@@ -291,14 +292,12 @@ namespace Lykke.SettingsReader
                 if (_queue == null)
                     return Task.CompletedTask;
 
-                var messageBody = JsonConvert.SerializeObject(new
+                return _queue.AddMessageAsync(new CloudQueueMessage(new
                 {
                     Type = "Monitor",
                     Sender = _sender,
                     Message = message
-                });
-                
-                return _queue.AddMessageAsync(new CloudQueueMessage(messageBody));
+                }.ToJson()));
             }
             catch
             {
