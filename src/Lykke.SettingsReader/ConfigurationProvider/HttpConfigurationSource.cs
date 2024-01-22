@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Lykke.SettingsReader.ConfigurationProvider;
 
-public class HttpConfigurationSource : IConfigurationSource
+internal class HttpConfigurationSource : IConfigurationSource
 {
     private readonly Uri _configurationUrl;
 

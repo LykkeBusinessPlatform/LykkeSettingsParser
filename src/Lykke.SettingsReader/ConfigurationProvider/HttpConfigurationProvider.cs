@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Lykke.SettingsReader.ConfigurationProvider;
 
-public class HttpConfigurationProvider : Microsoft.Extensions.Configuration.ConfigurationProvider
+internal class HttpConfigurationProvider : Microsoft.Extensions.Configuration.ConfigurationProvider
 {
     private readonly Uri _configurationUri;
 

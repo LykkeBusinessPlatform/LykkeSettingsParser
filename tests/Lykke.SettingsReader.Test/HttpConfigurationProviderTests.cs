@@ -35,7 +35,7 @@ namespace Lykke.SettingsReader.Test
             _server.Given(Request.Create().WithPath(path).UsingGet()).RespondWith(Response.Create().WithBodyAsJson(testModel));
             
             _configuration = new ConfigurationBuilder()
-                .AddHttpConfiguration(new Uri($"{_server.Url}{path}"))
+                .AddHttpSourceConfiguration(new Uri($"{_server.Url}{path}"))
                 .Build();
             
             var bindedModel = new ConfigurationModel();
