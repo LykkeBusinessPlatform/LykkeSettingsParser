@@ -24,11 +24,6 @@ internal class HttpConfigurationProvider : Microsoft.Extensions.Configuration.Co
     {
         var config = HttpClientProvider.Client.GetStringAsync(_configurationUri).GetAwaiter().GetResult();
         var jsonDocument = JsonDocument.Parse(config, JsonDocumentOptions);
-        var configDictionary = JsonParser.Parse(jsonDocument);
-
-        foreach (var keyValuePair in configDictionary)
-        {
-            Data.Add(keyValuePair.Key, keyValuePair.Value);
-        }
+        Data = JsonParser.Parse(jsonDocument);
     }
 }
