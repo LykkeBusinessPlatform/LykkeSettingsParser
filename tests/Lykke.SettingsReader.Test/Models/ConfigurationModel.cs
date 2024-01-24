@@ -32,8 +32,16 @@ namespace Lykke.SettingsReader.Test.Models
 
         [Optional]
         public ConfigurationModelSection1 Section1 { get; set; }
+        
+        [Optional]
+        public List<NestedCollectionSection1> NestedCollectionSection1 { get; set; }
     }
+    public class ConfigurationModel2
+    {
 
+        [Optional]
+        public List<NestedCollectionSection1> NestedCollectionSection1 { get; set; }
+    }
     public enum ConfigurationModelEnum
     {
         One,
@@ -44,5 +52,10 @@ namespace Lykke.SettingsReader.Test.Models
     {
         [Optional]
         public string StringProperty1 { get; set; }
+    }
+
+    public class NestedCollectionSection1
+    {
+        public List<ConfigurationModelSection1> NestedConfigSection { get; set; }
     }
 }
