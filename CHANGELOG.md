@@ -1,6 +1,8 @@
-## 8.1.0 (2024-01-25)
-- Added possibility to load configuration from http source into IConfiguration
-- Added settings template generator based on IConfiguration
+## [[tbd]] (2024-01-25)
+
+### Added
+-  Possibility to load configuration from http source into IConfiguration
+-  Settings template generator based on IConfiguration
 
 ## 8.0.0 (2023-11-23)
 
