@@ -8,19 +8,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace Lykke.SettingsReader.SettingsTemplate;
 
-internal class SettingsTemplateConverter : JsonConverter<IEnumerable<IConfigurationSection>>
+internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
 {
     private readonly Regex _arrayElementKeyPattern = new Regex(@"^\d+$"); //numbers only  e.g 0
 
-    public override IEnumerable<IConfigurationSection> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override IConfiguration Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         throw new NotImplementedException("Deserializing settings template into IConfiguration its not supported.");
     }
     
-    public override void Write(Utf8JsonWriter writer, IEnumerable<IConfigurationSection> sections, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, IConfiguration configuration, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
-        foreach (var child in sections)
+        foreach (var child in configuration.GetChildren())
         {
             WriteSection(writer, child);
         }

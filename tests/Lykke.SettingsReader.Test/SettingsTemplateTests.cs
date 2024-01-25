@@ -61,7 +61,7 @@ namespace Lykke.SettingsReader.Test
        [Fact]
         public void Settings_template_in_json_has_to_be_created_from_IConfiguration()
         {
-            var json = new DefaultJsonTemplateGenerator(_configuration.GetChildren()).GenerateJsonSettingsTemplate();
+            var json = new DefaultJsonTemplateGenerator(_configuration).GenerateJsonSettingsTemplate();
             var expectedJson = JToken.Parse(_expectedTemplate);
             var actualJson = JToken.Parse(json);
             actualJson.Should().BeEquivalentTo(expectedJson);

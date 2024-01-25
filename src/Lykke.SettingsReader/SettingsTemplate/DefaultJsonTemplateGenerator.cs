@@ -1,24 +1,23 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
 namespace Lykke.SettingsReader.SettingsTemplate;
 /// <summary>
-///  Default implementation of IJsonSettingsTemplateGenerator. Its using collection of IConfigurationSections interface and converts it into json settings template.
+///  Default implementation of IJsonSettingsTemplateGenerator. Its using IConfiguration interface and converts it into json settings template.
 /// </summary>
 internal class DefaultJsonTemplateGenerator : IJsonSettingsTemplateGenerator
 {
-    private readonly IEnumerable<IConfigurationSection>  _configurationSections;
+    private readonly IConfiguration _configuration;
 
-    public DefaultJsonTemplateGenerator(IEnumerable<IConfigurationSection> sections)
+    public DefaultJsonTemplateGenerator(IConfiguration configuration)
     {
-        _configurationSections = sections  ?? throw new ArgumentNullException(nameof(sections));
+        _configuration = configuration  ?? throw new ArgumentNullException(nameof(configuration));
     }
 
     public string GenerateJsonSettingsTemplate()
     {
-        var json = JsonSerializer.Serialize(_configurationSections, new JsonSerializerOptions
+        var json = JsonSerializer.Serialize(_configuration, new JsonSerializerOptions
         {
             Converters = { new SettingsTemplateConverter() },
             WriteIndented = true

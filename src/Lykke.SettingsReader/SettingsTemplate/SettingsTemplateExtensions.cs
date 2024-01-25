@@ -16,7 +16,6 @@ public static class SettingsTemplateExtensions
     /// <returns>IServiceCollection</returns>
     public static IServiceCollection AddSettingsTemplateGenerator(this IServiceCollection services)
     {
-        services.AddSingleton(provider => provider.GetRequiredService<IConfiguration>().GetChildren());
         services.AddTransient<IJsonSettingsTemplateGenerator, DefaultJsonTemplateGenerator>();
         return services;
     }
