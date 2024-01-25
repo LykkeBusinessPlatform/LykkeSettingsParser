@@ -1,4 +1,4 @@
-## [[tbd]] (2024-01-25)
+## 8.1.0 (2024-01-25)
 
 ### Added
 -  Possibility to load configuration from http source into IConfiguration
