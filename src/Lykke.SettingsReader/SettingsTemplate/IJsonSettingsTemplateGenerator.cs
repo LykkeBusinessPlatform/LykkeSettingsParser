@@ -6,7 +6,7 @@ namespace Lykke.SettingsReader.SettingsTemplate;
 public interface IJsonSettingsTemplateGenerator
 {
     /// <summary>
-    /// This method will generate JsonSettingsTemplate in json. Default implementation is taking IConfiguration interface and converts it into json settings template.
+    /// This method will generate JsonSettingsTemplate in json.
     /// </summary>
     /// <returns>string as json</returns>
     string GenerateJsonSettingsTemplate();

@@ -8,48 +8,52 @@ using Microsoft.Extensions.Configuration;
 
 namespace Lykke.SettingsReader.SettingsTemplate;
 
-internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
+internal class SettingsTemplateConverter : JsonConverter<IEnumerable<IConfigurationSection>>
 {
     private readonly Regex _arrayElementKeyPattern = new Regex(@"^\d+$"); //numbers only  e.g 0
 
-    public override IConfiguration Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override IEnumerable<IConfigurationSection> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         throw new NotImplementedException("Deserializing settings template into IConfiguration its not supported.");
     }
-
-    public override void Write(Utf8JsonWriter writer, IConfiguration value, JsonSerializerOptions options)
+    
+    public override void Write(Utf8JsonWriter writer, IEnumerable<IConfigurationSection> sections, JsonSerializerOptions options)
     {
-        var isArray = false;
-        var children = value.GetChildren().ToList();
-        if (value is IConfigurationSection section)
+        writer.WriteStartObject();
+        foreach (var child in sections)
         {
-            isArray = children.Any() && children.All(configurationSection => _arrayElementKeyPattern.Match(configurationSection.Key).Success);
-            var isArrayElement = _arrayElementKeyPattern.Match(section.Key).Success;
-            var isObject = section.Value is null;
-            if (isArray)
+            WriteSection(writer, child);
+        }
+        writer.WriteEndObject();
+    }
+
+    private void WriteSection(Utf8JsonWriter writer, IConfigurationSection section)
+    {
+        var children = section.GetChildren().ToList();
+        var isArray = children.Any() && children.All(configurationSection =>
+            _arrayElementKeyPattern.Match(configurationSection.Key).Success);
+        var isArrayElement = _arrayElementKeyPattern.Match(section.Key).Success;
+        var isObject = section.Value is null;
+        
+        if (isArray)
+        {
+            writer.WriteStartArray(section.Key);
+        }
+        else if (isObject)
+        {
+            if (isArrayElement)
             {
-                writer.WriteStartArray(section.Key);
+                writer.WriteStartObject();
             }
-            else if (isObject)
+            else
             {
-                if (isArrayElement)
-                {
-                    writer.WriteStartObject();
-                }
-                else
-                {
-                    writer.WriteStartObject(section.Key);
-                }
-            }
-            else //its not array or object so its simple value
-            {
-                SetTypeOfValue(writer, section, isArrayElement);
-                return;
+                writer.WriteStartObject(section.Key);
             }
         }
-        else //its not section so its root
+        else //its not array or object so its simple value
         {
-            writer.WriteStartObject();
+            SetTypeOfValue(writer, section, isArrayElement);
+            return;
         }
 
         if (isArray) //take only first element of array for template
@@ -59,7 +63,7 @@ internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
 
         foreach (var child in children)
         {
-            Write(writer, child, options);
+            WriteSection(writer, child);
         }
 
         if (isArray)
@@ -71,7 +75,7 @@ internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
             writer.WriteEndObject();
         }
     }
-
+    
     private static void SetTypeOfValue(Utf8JsonWriter writer, IConfigurationSection section, bool isArrayElement)
     {
         if (int.TryParse(section.Value, out _))

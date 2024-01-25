@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lykke.SettingsReader.SettingsTemplate;
@@ -14,7 +16,8 @@ public static class SettingsTemplateExtensions
     /// <returns>IServiceCollection</returns>
     public static IServiceCollection AddSettingsTemplateGenerator(this IServiceCollection services)
     {
-        services.AddTransient<IJsonSettingsTemplateGenerator, JsonSettingsTemplateGenerator>();
+        services.AddSingleton(provider => provider.GetRequiredService<IConfiguration>().GetChildren());
+        services.AddTransient<IJsonSettingsTemplateGenerator, DefaultJsonTemplateGenerator>();
         return services;
     }
 }
