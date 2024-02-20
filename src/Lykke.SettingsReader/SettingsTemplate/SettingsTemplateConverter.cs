@@ -12,14 +12,14 @@ namespace Lykke.SettingsReader.SettingsTemplate;
 internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
 {
     private readonly ILogger<SettingsTemplateConverter> _logger;
-    private readonly TemplateFilers _regexFilters;
+    private readonly TemplateFilters _templateFilters;
     private readonly Regex _arrayElementKeyPattern = new Regex(@"^\d+$"); //numbers only  e.g 0
 
 
-    public SettingsTemplateConverter(ILoggerFactory loggerFactory, TemplateFilers regexFilters)
+    public SettingsTemplateConverter(ILogger<SettingsTemplateConverter> logger, TemplateFilters templateFilters)
     {
-        _logger = loggerFactory.CreateLogger<SettingsTemplateConverter>();
-        _regexFilters = regexFilters;
+        _logger = logger;
+        _templateFilters = templateFilters;
     }
 
     public override IConfiguration Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -40,9 +40,9 @@ internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
 
     private void WriteSection(Utf8JsonWriter writer, IConfigurationSection section)
     {
-        if (_regexFilters.Any(pattern => Regex.Match(section.Key, pattern).Success))
+        if (_templateFilters.Matching(section.Key))
         {
-            _logger?.LogDebug("Skipping entry in settings template {key}", section.Key);
+            _logger?.LogDebug("Template filters matched {key}. Skipping entry in settings template", section.Key);
             return;
         }
 

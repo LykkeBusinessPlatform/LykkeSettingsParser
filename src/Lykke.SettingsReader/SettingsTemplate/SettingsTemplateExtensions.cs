@@ -16,16 +16,16 @@ public static class SettingsTemplateExtensions
     /// <param name="services"></param>
     /// <param name="configureFilters">configuration action which allows to add/remove filters for settings template</param>
     /// <returns>IServiceCollection</returns>
-    public static IServiceCollection AddSettingsTemplateGenerator(this IServiceCollection services, Action<TemplateFilers> configureFilters = null)
+    public static IServiceCollection AddSettingsTemplateGenerator(this IServiceCollection services, Action<TemplateFilters> configureFilters = null)
     {
-        var filters = new TemplateFilers();
+        var filters = new TemplateFilters();
         if (configureFilters != null)
         {
             configureFilters(filters);
         }
 
         services.AddTransient<IJsonSettingsTemplateGenerator>(provider =>
-            new DefaultJsonTemplateGenerator(provider.GetRequiredService<ILoggerFactory>(),
+            new DefaultJsonTemplateGenerator(provider.GetRequiredService<ILogger<SettingsTemplateConverter>>(),
                 provider.GetRequiredService<IConfiguration>(), filters));
         return services;
     }

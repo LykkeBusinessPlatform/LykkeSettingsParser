@@ -10,13 +10,13 @@ namespace Lykke.SettingsReader.SettingsTemplate;
 /// </summary>
 internal class DefaultJsonTemplateGenerator : IJsonSettingsTemplateGenerator
 {
-    private readonly ILoggerFactory  _loggerFactory;
+    private readonly ILogger<SettingsTemplateConverter> _logger;
     private readonly IConfiguration _configuration;
-    private readonly TemplateFilers _regexFilters;
+    private readonly TemplateFilters _regexFilters;
 
-    public DefaultJsonTemplateGenerator(ILoggerFactory  loggerFactory,IConfiguration configuration, TemplateFilers regexFilters)
+    public DefaultJsonTemplateGenerator(ILogger<SettingsTemplateConverter> logger,IConfiguration configuration, TemplateFilters regexFilters)
     {
-        _loggerFactory = loggerFactory;
+        _logger = logger;
         _configuration = configuration  ?? throw new ArgumentNullException(nameof(configuration));
         _regexFilters = regexFilters;
     }
@@ -25,7 +25,7 @@ internal class DefaultJsonTemplateGenerator : IJsonSettingsTemplateGenerator
     {
         var json = JsonSerializer.Serialize(_configuration, new JsonSerializerOptions
         {
-            Converters = { new SettingsTemplateConverter(_loggerFactory,_regexFilters) },
+            Converters = { new SettingsTemplateConverter(_logger,_regexFilters) },
             WriteIndented = true
         });
 

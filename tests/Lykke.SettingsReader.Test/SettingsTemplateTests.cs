@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Linq;
 using AutoFixture;
-using AutoFixture.Xunit2;
-using Castle.Core.Logging;
 using FluentAssertions;
 using Lykke.SettingsReader.ConfigurationProvider;
 using Lykke.SettingsReader.SettingsTemplate;
 using Lykke.SettingsReader.Test.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
 using Xunit;
-using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Lykke.SettingsReader.Test
 {
@@ -97,7 +94,7 @@ namespace Lykke.SettingsReader.Test
         [Fact]
         public void Settings_template_in_json_has_to_be_created_from_IConfiguration()
         {
-            var json = new DefaultJsonTemplateGenerator(_sp.GetService<ILoggerFactory>(), _configuration, new TemplateFilers()).GenerateJsonSettingsTemplate();
+            var json = new DefaultJsonTemplateGenerator(_sp.GetService<ILogger<SettingsTemplateConverter>>(), _configuration, new TemplateFilters()).GenerateJsonSettingsTemplate();
             var expectedJson = JToken.Parse(_expectedTemplate);
             var actualJson = JToken.Parse(json);
             actualJson.Should().BeEquivalentTo(expectedJson);
@@ -119,7 +116,7 @@ namespace Lykke.SettingsReader.Test
             var allTestVariablesAdded = _testVariables.All(variable => configuration.GetChildren().Select(section => section.Key).Contains(variable));
             allTestVariablesAdded.Should().BeTrue();
             
-            var json = new DefaultJsonTemplateGenerator(_sp.GetService<ILoggerFactory>(), configuration, new TemplateFilers()).GenerateJsonSettingsTemplate();
+            var json = new DefaultJsonTemplateGenerator(_sp.GetService<ILogger<SettingsTemplateConverter>>(), configuration, new TemplateFilters()).GenerateJsonSettingsTemplate();
             var actualJson = JToken.Parse(json);
 
             actualJson.Should().BeEmpty();
