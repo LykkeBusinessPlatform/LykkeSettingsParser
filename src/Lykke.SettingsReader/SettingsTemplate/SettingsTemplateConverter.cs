@@ -5,18 +5,28 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Lykke.SettingsReader.SettingsTemplate;
 
 internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
 {
+    private readonly ILogger<SettingsTemplateConverter> _logger;
+    private readonly TemplateFilters _templateFilters;
     private readonly Regex _arrayElementKeyPattern = new Regex(@"^\d+$"); //numbers only  e.g 0
+
+
+    public SettingsTemplateConverter(ILogger<SettingsTemplateConverter> logger, TemplateFilters templateFilters)
+    {
+        _logger = logger;
+        _templateFilters = templateFilters;
+    }
 
     public override IConfiguration Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         throw new NotImplementedException("Deserializing settings template into IConfiguration its not supported.");
     }
-    
+
     public override void Write(Utf8JsonWriter writer, IConfiguration configuration, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
@@ -24,17 +34,24 @@ internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
         {
             WriteSection(writer, child);
         }
+
         writer.WriteEndObject();
     }
 
     private void WriteSection(Utf8JsonWriter writer, IConfigurationSection section)
     {
+        if (_templateFilters.Matching(section.Key))
+        {
+            _logger?.LogDebug("Template filters matched {key}. Skipping entry in settings template", section.Key);
+            return;
+        }
+
         var children = section.GetChildren().ToList();
         var isArray = children.Any() && children.All(configurationSection =>
             _arrayElementKeyPattern.Match(configurationSection.Key).Success);
         var isArrayElement = _arrayElementKeyPattern.Match(section.Key).Success;
         var isObject = section.Value is null;
-        
+
         if (isArray)
         {
             writer.WriteStartArray(section.Key);
@@ -75,7 +92,7 @@ internal class SettingsTemplateConverter : JsonConverter<IConfiguration>
             writer.WriteEndObject();
         }
     }
-    
+
     private static void SetTypeOfValue(Utf8JsonWriter writer, IConfigurationSection section, bool isArrayElement)
     {
         if (int.TryParse(section.Value, out _))
