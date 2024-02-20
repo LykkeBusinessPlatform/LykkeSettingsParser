@@ -1,4 +1,4 @@
-## [[TBD]] (2024-02-15)
+## 8.1.1 (2024-02-15)
 
 ### Added
 -  Possibility to filter out settings template entries
