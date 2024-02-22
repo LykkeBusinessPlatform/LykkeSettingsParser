@@ -9,13 +9,6 @@ namespace Lykke.SettingsReader.SettingsTemplate;
 /// </summary>
 public class TemplateFilters
 {
-    /// <summary>
-    /// This regex will match variables added by k8s service discovery https://kubernetes.io/docs/concepts/services-networking/service/#environment-variables
-    /// Examples: SOMESERVICE_PORT","SOMESERVICE_PORT_5012_TCP","SOMESERVICE_PORT_5012_TCP_ADDR","SOMESERVICE_PORT_5012_TCP_PORT","SOMESERVICE_PORT_5012_TCP_PROTO","SOMESERVICE_SERVICE_HOST","SOMESERVICE_SERVICE_PORT_HTTP"
-    /// </summary>
-    public const string KubernetesServiceDiscoveryVariablesPattern =
-        @"^(\w+)_PORT(?:_(\w+)_TCP(?:_(ADDR|PORT|PROTO))?)?$|^(\w+)_SERVICE_(HOST|PORT)(?:_(HTTP))?$|^(\w+)_SERVICE_PORT_TCP$";
-
     public const string ASPNETCORE_URLS = "ASPNETCORE_URLS";
     public const string HOME = "HOME";
     public const string HOSTNAME = "HOSTNAME";
@@ -28,10 +21,13 @@ public class TemplateFilters
     public const string APPLICATIONNAME = "applicationName";
     public const string URLS = "URLS";
     public const string VERSION = "VERSION";
-
+    public const string CONTENTROOT = "contentRoot";
+    public const string SERVICE_HOST = "_SERVICE_HOST";
+    public const string _PORT = "_PORT";
+    public const string SETTINGSURL = "SettingsUrl";
+ 
     private List<string> Filters { get; } = new()
     {
-        KubernetesServiceDiscoveryVariablesPattern,
         ASPNETCORE_URLS,
         HOME,
         HOSTNAME,
@@ -43,7 +39,11 @@ public class TemplateFilters
         SYSTEM_GLOBALIZATION_INVARIANT,
         APPLICATIONNAME,
         URLS,
-        VERSION
+        VERSION,
+        CONTENTROOT,
+        SERVICE_HOST,
+        _PORT,
+        SETTINGSURL
     };
 
     /// <summary>

@@ -68,7 +68,18 @@ namespace Lykke.SettingsReader.Test
             "BIGBROTHER_SNAPSHOT_WEBAPI_SERVICE_HOST",
             "BIGBROTHER_SNAPSHOT_WEBAPI_PORT_5025_TCP_ADDR",
             "URLS",
-            "VERSION"
+            "VERSION",
+            "KUBERNETES_SERVICE_PORT_HTTPS",
+            "MDM_EXT_SERVICE_PORT_MDM_EXT",
+            "MT_ASSET_SERVICE_SERVICE_PORT_SIDECAR",
+            "MT_ASSET_SERVICE_SERVICE_PORT_SIDECAR_HTTP",
+            "POSTGRES_SERVICE_PORT_5432",
+            "RABBIT_MT_SERVICE_PORT_15672" ,
+            "RABBIT_MT_SERVICE_PORT_5672",
+            "TRADING_IDEAS_SERVICE_PORT_TRADING_IDEAS_MAIN_SERVICE",
+            "TRADING_IDEAS_SERVICE_PORT_TRADING_IDEAS_MOCK",
+            "contentRoot",
+            "SettingsUrl"
         };
         
         public SettingsTemplateTests()
