@@ -21,10 +21,10 @@ public class TemplateFilters
     public const string APPLICATIONNAME = "applicationName";
     public const string URLS = "URLS";
     public const string VERSION = "VERSION";
-    public const string CONTENTROOT = "contentRoot";
+    public const string CONTENT_ROOT = "contentRoot";
     public const string SERVICE_HOST = "_SERVICE_HOST";
-    public const string _PORT = "_PORT";
-    public const string SETTINGSURL = "SettingsUrl";
+    public const string PORT = "_PORT";
+    public const string SETTINGS_URL = "SettingsUrl";
  
     private List<string> Filters { get; } = new()
     {
@@ -40,10 +40,10 @@ public class TemplateFilters
         APPLICATIONNAME,
         URLS,
         VERSION,
-        CONTENTROOT,
+        CONTENT_ROOT,
         SERVICE_HOST,
-        _PORT,
-        SETTINGSURL
+        PORT,
+        SETTINGS_URL
     };
 
     /// <summary>
