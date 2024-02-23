@@ -1,4 +1,4 @@
-## [[TBD]] (2024-02-22)
+## 8.1.2 (2024-02-22)
 
 ### Added
 -  New default filters for settings template 

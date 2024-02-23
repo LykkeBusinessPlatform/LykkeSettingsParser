@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <PackageId>LykkeBiz.SettingsReader</PackageId>
-    <Version>8.1.1</Version>
+    <Version>8.1.2</Version>
     <Authors>Lykke Business</Authors>
     <Company>Lykke Business</Company>
     <Description>The package deserialise json and trown an exception it any of field is not filled.</Description>
