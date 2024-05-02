@@ -1,3 +1,8 @@
+## [[TBD]] (2024-05-02)
+
+### Added
+-  Changing internal of settings endpoint
+
 ## 8.1.2 (2024-02-22)
 
 ### Added

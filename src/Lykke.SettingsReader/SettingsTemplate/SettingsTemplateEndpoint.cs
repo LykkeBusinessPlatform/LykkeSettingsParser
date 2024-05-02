@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Lykke.SettingsReader.SettingsTemplate;
 
@@ -19,10 +19,12 @@ public static class SettingsTemplateEndpoint
     public static IEndpointRouteBuilder AddSettingsTemplateEndpoint(this IEndpointRouteBuilder builder,
         string path = "/settings/template")
     {
-        builder.MapGet(path, (IJsonSettingsTemplateGenerator generator) =>
+        builder.MapGet(path, async (context) =>
         {
+            var generator = context.RequestServices.GetRequiredService<IJsonSettingsTemplateGenerator>();
             var json = generator.GenerateJsonSettingsTemplate();
-            return Task.FromResult(Results.Text(json, contentType: "application/json"));
+            context.Response.Headers.ContentType = "application/json";
+            await context.Response.WriteAsync(json);
         });
         return builder;
     }
