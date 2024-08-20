@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Lykke.SettingsReader.Attributes;
 using Lykke.SettingsReader.Exceptions;
 using Lykke.SettingsReader.ReloadingManager.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
-using MongoDB.Bson;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Polly;
@@ -21,7 +19,6 @@ namespace Lykke.SettingsReader
     /// <summary>
     /// Class for settings json parsing and validation.
     /// </summary>
-    [PublicAPI]
     public static partial class SettingsProcessor
     {
         private static CloudQueue _queue;
@@ -118,7 +115,7 @@ namespace Lykke.SettingsReader
 
             return errorMessages;
         }
-        
+
         private static T FillChildrenFields<T>(JToken jsonObj)
         {
             return (T)Convert(jsonObj, typeof(T), "");
@@ -158,16 +155,16 @@ namespace Lykke.SettingsReader
                 res.Add(Convert(elem, childType, propertyPath));
             }
 
-            if (!targetType.IsArray) 
+            if (!targetType.IsArray)
                 return res;
-            
+
             var arr = Array.CreateInstance(targetType.GetElementType(), res.Count);
-            
+
             for (var ii = 0; ii < res.Count; ii++)
             {
                 arr.SetValue(res[ii], ii);
             }
-            
+
             return arr;
         }
 
@@ -209,7 +206,7 @@ namespace Lykke.SettingsReader
             var errorMessages = (await Task.WhenAll(tasks))
                 .Where(item => !string.IsNullOrEmpty(item))
                 .ToList();
-            
+
             return errorMessages.Count == 0 ? null : string.Join(Environment.NewLine, errorMessages);
         }
 
@@ -226,7 +223,7 @@ namespace Lykke.SettingsReader
 
             List<string> errorMessages;
             List<Task<string>> tasks;
-            
+
             if (checkAttribute != null)
             {
                 var checker = checkAttribute.GetChecker();
@@ -250,9 +247,9 @@ namespace Lykke.SettingsReader
                 return errorMessages.Count == 0 ? null : string.Join(Environment.NewLine, errorMessages);
             }
 
-            if (!property.CanWrite) 
+            if (!property.CanWrite)
                 return null;
-            
+
             object[] values = GetValuesToCheck(property, model);
 
             tasks = values.Select(ProcessChecksAsync).ToList();
@@ -260,7 +257,7 @@ namespace Lykke.SettingsReader
             errorMessages = (await Task.WhenAll(tasks))
                 .Where(item => !string.IsNullOrEmpty(item))
                 .ToList();
-            
+
             return errorMessages.Count == 0 ? null : string.Join(Environment.NewLine, errorMessages);
         }
 
@@ -269,18 +266,18 @@ namespace Lykke.SettingsReader
             if (string.IsNullOrWhiteSpace(val))
             {
                 var optionalAttribute = property.GetCustomAttribute(typeof(OptionalAttribute));
-                
+
                 if (optionalAttribute == null)
                     return CheckFieldResult.Failed(property.Name, val, "Empty setting value").Description;
-                
+
                 return null;
             }
 
             CheckFieldResult checkResult = await _retry.ExecuteAsync(() => Task.FromResult(checker.CheckField(model, property.Name, val)));
 
-            if (checkResult.Result) 
+            if (checkResult.Result)
                 return null;
-            
+
             await SendSlackNotificationAsync(checkResult.Description);
             return checkResult.Description;
         }
@@ -292,12 +289,15 @@ namespace Lykke.SettingsReader
                 if (_queue == null)
                     return Task.CompletedTask;
 
-                return _queue.AddMessageAsync(new CloudQueueMessage(new
-                {
-                    Type = "Monitor",
-                    Sender = _sender,
-                    Message = message
-                }.ToJson()));
+                return _queue.AddMessageAsync(
+                    new CloudQueueMessage(
+                        JsonConvert.SerializeObject(
+                            new
+                            {
+                                Type = "Monitor",
+                                Sender = _sender,
+                                Message = message
+                            })));
             }
             catch
             {

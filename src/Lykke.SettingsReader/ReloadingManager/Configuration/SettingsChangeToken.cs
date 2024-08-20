@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Primitives;
-using JetBrains.Annotations;
 
 namespace Lykke.SettingsReader.ReloadingManager.Configuration
 {
@@ -79,8 +79,7 @@ namespace Lykke.SettingsReader.ReloadingManager.Configuration
         /// <param name="callback">The System.Action`1 to invoke.</param>
         /// <param name="state">State to be passed into the callback.</param>
         /// <returns>An System.IDisposable that is used to unregister the callback.</returns>
-        [NotNull]
-        public IDisposable RegisterChangeCallback([NotNull] Action<object> callback, [CanBeNull] object state)
+        public IDisposable RegisterChangeCallback([NotNull] Action<object> callback, [AllowNull] object state)
         {
             var callBackPair = (callback, state);
             _callbacks.Add(callBackPair);

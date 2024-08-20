@@ -1,12 +1,10 @@
 ﻿using System;
-using JetBrains.Annotations;
 
 namespace Lykke.SettingsReader.ReloadingManager.Configuration
 {
     /// <summary>
     /// Options for configuring slack for failed dependencies checks
     /// </summary>
-    [PublicAPI]
     public class SlackNotificationOptions<TAppSettings>
     {
         private readonly TAppSettings _settings;
@@ -15,12 +13,12 @@ namespace Lykke.SettingsReader.ReloadingManager.Configuration
         /// Azure connection string
         /// </summary>
         internal string ConnectionString { get; private set; }
-        
+
         /// <summary>
         /// Azure queue name
         /// </summary>
         internal string QueueName { get; private set; }
-        
+
         /// <summary>
         /// Sender name used in slack notification message
         /// </summary>
@@ -39,7 +37,7 @@ namespace Lykke.SettingsReader.ReloadingManager.Configuration
         {
             ConnectionString = connStringFunction(_settings);
         }
-        
+
         /// <summary>
         /// Sets azure queue name 
         /// </summary>
