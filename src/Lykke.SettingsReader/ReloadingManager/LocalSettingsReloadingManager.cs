@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Lykke.SettingsReader.ReloadingManager.Configuration;
 
 namespace Lykke.SettingsReader
 {
-    [PublicAPI]
     public class LocalSettingsReloadingManager<TSettings> : ReloadingManagerWithConfigurationBase<TSettings>
     {
         private readonly string _path;
@@ -14,7 +12,7 @@ namespace Lykke.SettingsReader
         private readonly Action<TSettings> _configure;
         private readonly bool _throwExceptionOnCheckError;
 
-        public LocalSettingsReloadingManager(string path, 
+        public LocalSettingsReloadingManager(string path,
             Action<SlackNotificationOptions<TSettings>> slackNotificationOptions,
             Action<TSettings> configure = null,
             bool throwExceptionOnCheckError = false)
@@ -50,7 +48,7 @@ namespace Lykke.SettingsReader
                         throw new Exception($"Services check failed:{Environment.NewLine}{errorMessages} ");
                     }
                 }
-                
+
                 _configure?.Invoke(processingResult.Item1);
                 return processingResult.Item1;
             }

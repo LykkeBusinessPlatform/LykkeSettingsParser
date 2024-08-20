@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace Lykke.SettingsReader.Checkers
 {
@@ -9,12 +9,12 @@ namespace Lykke.SettingsReader.Checkers
         public CheckFieldResult CheckField(object model, string propertyName, string value)
         {
             var url = string.Empty;
-            
+
             try
             {
                 var sb = new SqlConnectionStringBuilder(value);
                 url = sb.DataSource;
-                
+
                 using (var connection = new SqlConnection(sb.ConnectionString))
                 {
                     connection.Open();

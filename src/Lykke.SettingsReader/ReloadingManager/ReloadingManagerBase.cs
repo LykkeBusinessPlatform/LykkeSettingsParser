@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 
 namespace Lykke.SettingsReader
 {
@@ -9,7 +8,6 @@ namespace Lykke.SettingsReader
     /// Base class for IReloadingManager functionality
     /// </summary>
     /// <typeparam name="TSettings">Type of data to be loaded/reloaded</typeparam>
-    [PublicAPI]
     public abstract class ReloadingManagerBase<TSettings> : IReloadingManager<TSettings>
     {
         private readonly ReaderWriterLockSlim _sync = new ReaderWriterLockSlim();

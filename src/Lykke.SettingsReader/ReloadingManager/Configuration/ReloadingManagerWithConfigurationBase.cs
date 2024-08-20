@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
-using JetBrains.Annotations;
 
 namespace Lykke.SettingsReader.ReloadingManager.Configuration
 {
@@ -9,7 +9,6 @@ namespace Lykke.SettingsReader.ReloadingManager.Configuration
     /// Base abstract implementation for IReloadingManagerWithConfiguration
     /// </summary>
     /// <typeparam name="T">Type of data to be loaded/reloaded</typeparam>
-    [PublicAPI]
     public abstract class ReloadingManagerWithConfigurationBase<T> : ReloadingManagerBase<T>, IReloadingManagerWithConfiguration<T>
     {
         private JToken _token;
