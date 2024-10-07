@@ -1,4 +1,4 @@
-## (TBD) (2024-07-10)
+## [[TBD]] (2024-07-10)
 
 ### Added
 -  Possibility for exposing settings template endpoint only on specific envs
