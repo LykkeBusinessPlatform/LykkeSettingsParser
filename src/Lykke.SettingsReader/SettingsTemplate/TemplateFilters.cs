@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Lykke.SettingsReader.SettingsTemplate;
 /// <summary>
@@ -25,7 +25,8 @@ public class TemplateFilters
     public const string SERVICE_HOST = "_SERVICE_HOST";
     public const string PORT = "_PORT";
     public const string SETTINGS_URL = "SettingsUrl";
- 
+    public const string COMPLUS = "COMPlus_";
+
     private List<string> Filters { get; } = new()
     {
         ASPNETCORE_URLS,
@@ -43,7 +44,12 @@ public class TemplateFilters
         CONTENT_ROOT,
         SERVICE_HOST,
         PORT,
-        SETTINGS_URL
+        SETTINGS_URL,
+        COMPLUS,
+        // These variables are added when WebApplication.CreateBuilder is used:
+        WebHostDefaults.PreventHostingStartupKey,
+        WebHostDefaults.HostingStartupAssembliesKey,
+        WebHostDefaults.HostingStartupExcludeAssembliesKey
     };
 
     /// <summary>
@@ -53,7 +59,7 @@ public class TemplateFilters
     /// <returns>true or false</returns>
     public bool Matching(string variableKey)
     {
-       return Filters.Any(pattern => Regex.Match(variableKey, pattern).Success);
+       return Filters.Any(pattern => Regex.Match(variableKey, pattern, RegexOptions.IgnoreCase).Success);
     }
 
     /// <summary>
@@ -62,12 +68,12 @@ public class TemplateFilters
     /// <param name="regexPattern"></param>
     public void AddFilter(string regexPattern)
         => Filters.Add(regexPattern);
-    
+
     /// <summary>
     /// Removing filter
     /// </summary>
     /// <param name="regexPattern"></param>
     public void RemoveFilter(string regexPattern)
         => Filters.Add(regexPattern);
-    
+
 }
