@@ -1,4 +1,9 @@
-## 9.1.0 ([[date]])
+## [[tbd]] ([[DATE]])
+
+### Changed
+-  renamed `AddSettingsTemplateEndpoint` -> `MapSettingsTemplate`
+
+## 9.1.0 (2024-11-12)
 
 ### Added
 -  more default template filters
