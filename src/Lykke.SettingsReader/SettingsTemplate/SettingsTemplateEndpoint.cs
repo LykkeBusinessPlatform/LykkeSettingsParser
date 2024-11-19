@@ -21,7 +21,7 @@ public static class SettingsTemplateEndpoint
     /// <param name="path">optional route on which this endpoint can be exposed</param>
     /// <param name="exposeOnEnvs">Environments that this endpoint will be exposed on. By default it will be exposed only on: Deployment, Development, Dev, Test</param>
     /// <returns>settings template in json format</returns>
-    public static IEndpointRouteBuilder AddSettingsTemplateEndpoint(this IEndpointRouteBuilder builder, string path = "/settings/template", string [] exposeOnEnvs = null)
+    public static IEndpointRouteBuilder MapSettingsTemplate(this IEndpointRouteBuilder builder, string path = "/settings/template", string [] exposeOnEnvs = null)
     {
         var hostEnv = builder.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
         var envMatched = exposeOnEnvs?.Any(hostEnv.IsEnvironment) ?? EnvironmentConstants.NonProdEnvs.Any(hostEnv.IsEnvironment);
