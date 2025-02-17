@@ -1,3 +1,8 @@
+## 9.3.0 ([[DATE]])
+
+### Added
+-  extension method for `IConfigurationBuilder` - `TryAddConfigurationSource` to support http and json file for `IConfigurationRoot`
+
 ## 9.2.0 ([[DATE]])
 
 ### Changed
