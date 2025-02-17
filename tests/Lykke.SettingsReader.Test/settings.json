@@ -1,0 +1,13 @@
+{
+  "TestModel": {
+    "SubObject": {
+      "Test1": "test",
+      "Test2": 10
+    },
+    "TestDouble": 2,
+    "SubArray": [
+      {"Test1": "test1", "Test2": 10},
+      {"Test1": "test2", "Test2": 20}
+    ]
+  }
+}
