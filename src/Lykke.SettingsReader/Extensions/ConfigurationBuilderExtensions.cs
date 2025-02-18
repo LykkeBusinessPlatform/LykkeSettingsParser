@@ -22,7 +22,7 @@ public static class ConfigurationBuilderExtensions
     /// </param>
     /// <param name="configurationUrlOrPath">Url for http endpoint from which configuration will be retrieved or path to json file. If null SettingsUrl env variable has to be set.</param>
     /// <returns>IConfigurationBuilder</returns>
-    public static IConfigurationBuilder TryAddConfigurationSource(this IConfigurationBuilder configurationBuilder, out ConfigurationSource source, string configurationUrlOrPath = null)
+    public static IConfigurationBuilder AddConfigurationSource(this IConfigurationBuilder configurationBuilder, out ConfigurationSource source, string configurationUrlOrPath = null)
     {
         var settingsUrl = configurationUrlOrPath ?? Environment.GetEnvironmentVariable("SettingsUrl");
 
@@ -38,7 +38,7 @@ public static class ConfigurationBuilderExtensions
         }
         else
         {
-            configurationBuilder.AddJsonFile(settingsUrl, true);
+            configurationBuilder.AddJsonFile(settingsUrl);
             source = ConfigurationSource.Json;
         }
 
@@ -51,8 +51,8 @@ public static class ConfigurationBuilderExtensions
     /// <param name="configurationBuilder">IConfigurationBuilder interface.</param>
     /// <param name="configurationUrlOrPath">Url for http endpoint from which configuration will be retrieved or path to json file. If null SettingsUrl env variable has to be set.</param>
     /// <returns>IConfigurationBuilder</returns>
-    public static IConfigurationBuilder TryAddConfigurationSource(this IConfigurationBuilder configurationBuilder, string configurationUrlOrPath = null)
+    public static IConfigurationBuilder AddConfigurationSource(this IConfigurationBuilder configurationBuilder, string configurationUrlOrPath = null)
     {
-        return TryAddConfigurationSource(configurationBuilder, out _, configurationUrlOrPath);
+        return AddConfigurationSource(configurationBuilder, out _, configurationUrlOrPath);
     }
 }

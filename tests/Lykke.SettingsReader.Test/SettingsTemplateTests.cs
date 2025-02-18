@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using AutoFixture;
 using FluentAssertions;
@@ -148,7 +149,7 @@ namespace Lykke.SettingsReader.Test
 
             var configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .TryAddConfigurationSource(out var source)
+                .AddConfigurationSource(out var source)
                 .Build();
 
             var existingSection = configuration.GetSection("TestModel");
@@ -170,7 +171,7 @@ namespace Lykke.SettingsReader.Test
         {
             var configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .TryAddConfigurationSource("settings.json")
+                .AddConfigurationSource("settings.json")
                 .Build();
 
             var existingSection = configuration.GetSection("TestModel");
@@ -199,7 +200,7 @@ namespace Lykke.SettingsReader.Test
 
             var configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .TryAddConfigurationSource(out var source)
+                .AddConfigurationSource(out var source)
                 .Build();
 
             var existingSection = configuration.GetSection("TestModel");
@@ -223,7 +224,7 @@ namespace Lykke.SettingsReader.Test
 
             var configuration = () => new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .TryAddConfigurationSource()
+                .AddConfigurationSource()
                 .Build();
 
             configuration.Should().Throw<ArgumentException>().WithMessage(
@@ -236,12 +237,24 @@ namespace Lykke.SettingsReader.Test
         {
             var configuration = () => new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .TryAddConfigurationSource()
+                .AddConfigurationSource()
                 .Build();
 
             configuration.Should().Throw<ArgumentException>().WithMessage(
                 "configurationUrlOrPath is not specified and environment variable 'SettingsUrl' is not defined",
                 "because SettingsUrl env variable was not provided and url was not specified directly in TryAddConfigurationSource");
+        }
+
+        [Fact]
+        public void TryAddConfigurationSource_throws_exception_when_SettingsUrl_is_not_specified_and_not_provided_directly1()
+        {
+            var configuration = () => new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddConfigurationSource("not_exists.json")
+                .Build();
+
+            configuration.Should().Throw<FileNotFoundException>().Where(x => x.Message.Contains("not_exists.json"),
+                "because specified file that doesn't exist");
         }
     }
 }
