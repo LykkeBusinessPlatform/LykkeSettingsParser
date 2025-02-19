@@ -31,7 +31,7 @@ jobs:
 
       - name: Checkout deployment tools
         run: |
-          git clone -v https://${{ secrets.BITBUCKET_USER }}:${{ secrets.BITBUCKET_PASSWORD }}@bitbucket.org/lykke-snow/lykke.snow.deployment.git lykke.snow.deployment
+          git clone -v https://${{ secrets.GH_USER }}:${{ secrets.GH_PASSWORD }}@github.com/LykkeBusiness/Lykke.Snow.Deployment lykke.snow.deployment
 
       - name: Parse version number
         uses: LykkeBusiness/.github/actions/parse-version@parse-version-v1
