@@ -29,4 +29,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Lykke.SettingsReader\Lykke.SettingsReader.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

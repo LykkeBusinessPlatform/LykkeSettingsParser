@@ -1,4 +1,9 @@
-## 9.2.0 ([[DATE]])
+## 9.3.0 ([[DATE]])
+
+### Added
+-  extension method for `IConfigurationBuilder` - `TryAddConfigurationSource` to support http and json file for `IConfigurationRoot`
+
+## 9.2.0 (2024-11-19)
 
 ### Changed
 -  renamed `AddSettingsTemplateEndpoint` -> `MapSettingsTemplate`
