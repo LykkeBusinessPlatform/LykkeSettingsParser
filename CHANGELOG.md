@@ -1,4 +1,4 @@
-## [[TBD]] ([[DATE]])
+## 9.3.0 (2025-02-19)
 
 ### Added
 -  extension method for `IConfigurationBuilder` - `AddConfigurationSource` to support http and json file for `IConfigurationRoot`
